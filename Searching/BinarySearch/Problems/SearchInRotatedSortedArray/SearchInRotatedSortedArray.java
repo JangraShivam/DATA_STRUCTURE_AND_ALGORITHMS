@@ -84,7 +84,9 @@ public class SearchInRotatedSortedArray {
         int target = scanner.nextInt();
         scanner.close();
 
-
+        int resultIndex = searchInRotatedSortedArray(nums, target);
+        System.out.println("Output: " + resultIndex);
+        
     }
 
 }
