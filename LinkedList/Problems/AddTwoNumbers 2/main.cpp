@@ -1,4 +1,4 @@
-// Problem : Add Two Numbers (LC - 2)
+// Problem : Add Two Numbers 2 (LC - 445)
 
 #include <iostream>
 using namespace std;
@@ -17,26 +17,34 @@ public:
 
 
 class Solution {
-public:
-    ListNode* addTwoNumbersRecursive(ListNode* l1, ListNode* l2, int carry){
-        // base case
-        if(l1 == nullptr && l2 == nullptr){
-            ListNode* sumNode = new ListNode(carry);
-            if(carry != 0) return sumNode;
-            else return nullptr;
+    ListNode* reverse(ListNode* head){
+        // check if list is empty or single node (yes -> no need to reverse)
+        if(head == nullptr || head->next == nullptr) return head;
+
+        // Intialize three iterators
+        ListNode* prev = nullptr;
+        ListNode* current = head;
+        ListNode* nextNode = head->next; 
+
+        // Iterate until current becomes null or on whole list
+        while(current != nullptr){
+            // reverse logic
+            current->next = prev;
+            prev = current;
+            current = nextNode;
+            if(nextNode != nullptr) nextNode = nextNode->next;
         }
 
-        int sum = (l1 != nullptr ? l1->val : 0) + (l2 != nullptr ? l2->val : 0) + carry;
-        ListNode* sumNode = new ListNode(sum%10);
-        carry = sum/10;
-        l1 = (l1 != nullptr ? l1->next : nullptr);
-        l2 = (l2 != nullptr ? l2->next : nullptr);
-        sumNode->next = addTwoNumbersRecursive(l1,l2,carry);
-        return sumNode;
+        // reverse list head
+        return prev;
     }
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        // reverse both lists
+        l1 = reverse(l1);
+        l2 = reverse(l2);
 
-    ListNode* addTwoNumbersIteratively(ListNode* l1, ListNode* l2) {
-        
+        //add both lists
         int carry = 0;
         ListNode* sumHead = nullptr;
         ListNode* sumTail = nullptr;
@@ -90,11 +98,9 @@ public:
             sumTail = newNode;
         }
 
-        return sumHead;
-    }
+        // reverse sum list
+        sumHead = reverse(sumHead);
 
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        // return addTwoNumbersIteratively(l1,l2);
-        return addTwoNumbersRecursive(l1,l2,0);
+        return sumHead;
     }
 };

@@ -8,23 +8,31 @@ class ListNode:
 
 
 class Solution:
-    def addTwoNumbersRecursive(self, l1: Optional[ListNode], l2: Optional[ListNode], carry: int) -> Optional[ListNode]:
-        # base case
-        if l1 == None and l2 == None :
-            sumNode = ListNode(carry)
-            if(carry != 0): return sumNode
-            else: return None
+    def reverse(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # check if list is empty or single node (yes -> no need to reverse)
+        if head == None or head.next == None: return head
 
-        sum = (l1.val if l1 != None else 0) + (l2.val if l2 != None else 0) + carry
-        sumNode = ListNode(sum%10)
-        carry = sum//10
-        l1 = (l1.next if l1 != None else None)
-        l2 = (l2.next if l2 != None else None)
-        sumNode.next = self.addTwoNumbersRecursive(l1,l2,carry)
-        return sumNode
+        # Intialize three iterators
+        prev = None
+        current = head
+        nextNode = head.next
 
-    def addTwoNumbersIteratively(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        # Iterate until current becomes null or on whole list
+        while current != None :
+            # reverse logic
+            current.next = prev
+            prev = current
+            current = nextNode
+            if(nextNode != None) : nextNode = nextNode.next
         
+        # reverse list head
+        return prev
+
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        # reverse both lists
+        l1 = self.reverse(l1)
+        l2 = self.reverse(l2)
+
         carry = 0
         sumHead = None
         sumTail = None
@@ -72,8 +80,5 @@ class Solution:
             sumTail.next = newNode
             sumTail = newNode
 
+        sumHead = self.reverse(sumHead)
         return sumHead
-    
-    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
-        # return self.addTwoNumbersIteratively(l1,l2)
-        return self.addTwoNumbersRecursive(l1,l2,0)

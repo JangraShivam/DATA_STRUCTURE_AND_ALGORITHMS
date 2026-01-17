@@ -7,7 +7,28 @@ class Node:
 
 
 class Solution:
-    def addOne(self,head):
+    
+    def addOneRecursive(self, head) -> int :
+        # Base case return 1 to add 
+        if head == None: return 1
+
+        carry = self.addOneRecursive(head.next)
+        sum = (head.data) + carry
+
+        head.data = (sum % 10)
+        return (sum//10)
+
+    def addOneRecursively(self, head):
+        # recusively
+        carry = self.addOneRecursive(head)
+        if carry != 0 :
+            newNode = Node(carry)
+            newNode.next = head
+            head = newNode
+
+        return head
+
+    def addOneIterative(self,head):
         # reverse the list 
         prev = None
         current = head
@@ -53,3 +74,7 @@ class Solution:
             head = newNode
 
         return head
+    
+    def addOne(self,head):
+        # return self.addOneIterative(head)
+        return self.addOneRecursively(head)

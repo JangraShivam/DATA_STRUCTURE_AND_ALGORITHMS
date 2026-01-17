@@ -18,7 +18,30 @@ public:
 
 class Solution {
   public:
-    Node* addOne(Node* head) {
+    int addOneRecursive(Node* head){
+        // Base case return 1 to add 
+        if(head == nullptr) return 1;
+
+        int carry = addOneRecursive(head->next);
+        int sum = (head->data) + carry;
+
+        head->data = (sum % 10);
+        return (sum/10);
+    }
+
+    Node* addOneRecursively(Node* head){
+        // recusively
+        int carry = addOneRecursive(head);
+        if(carry != 0){
+            Node* newNode = new Node(carry);
+            newNode->next = head;
+            head = newNode;
+        }
+
+        return head;
+    }
+
+    Node* addOneIterative(Node* head) {
         // reverse the list 
         Node* prev = nullptr;
         Node* current = head;
@@ -68,5 +91,10 @@ class Solution {
         }
 
         return head;
+    }
+
+    Node* addOne(Node* head) {
+        // return addOneIterative(head);
+        return addOneRecursively(head);  
     }
 };
